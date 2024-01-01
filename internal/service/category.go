@@ -1,0 +1,40 @@
+package service
+
+import (
+	"spun/internal/model"
+	"spun/internal/repository"
+	"spun/pkg/liberror"
+)
+
+type CategoryService struct {
+	repo repository.CategoryRepository
+}
+
+func NewCategoryService(repo repository.CategoryRepository) *CategoryService {
+	return &CategoryService{
+		repo: repo,
+	}
+}
+
+func (s *CategoryService) ViewCategory(id int64) (*model.Category, *liberror.Error) {
+	if id == 0 {
+		fieldErrors := []*liberror.Base{
+			{Error: "common.error.validation.required",
+				ErrorVars: map[string]interface{}{"field": "Field1"}},
+			{Error: "common.error.validation.email",
+				ErrorVars: map[string]interface{}{"field": "Field2"}},
+		}
+		return nil, liberror.NewErrValidation(fieldErrors...)
+	}
+
+	category, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, liberror.NewErrRepository()
+	}
+
+	if category == nil {
+		return nil, liberror.NewErrNotFound()
+	}
+
+	return category, nil
+}

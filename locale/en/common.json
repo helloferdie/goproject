@@ -1,0 +1,35 @@
+{
+  "error": {
+    "request": {
+      "bad": "Bad request",
+      "default": "Invalid request",
+      "forbidden": "Forbidden request",
+      "media_type": "Unsupported media type",
+      "method": "Method not allowed",
+      "timeout": "Request timeout",
+      "not_found": "Data not found",
+      "route": {
+        "not_found": "Route not found"
+      },
+      "unauthorized": "Unauthorized request"
+    },
+    "server": {
+      "default": "Internal server error",
+      "not_implemented": "Service not implemented yet",
+      "repository": "{{common.error.server.default}}",
+      "unknown": "{{common.error.server.default}}",
+      "timeout": "Server timeout"
+    },
+    "validation": {
+      "default": "Validation error",
+      "required": "{{.field}} is required",
+      "email": "{{.field}} must be a valid email"
+    }
+  },
+  "id": {
+    "other": "ID"
+  },
+  "success": {
+    "default": "Request successfully processed"
+  }
+}
