@@ -30,6 +30,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	e.Use(libmiddleware.Logger())
+	e.Use(libmiddleware.Session)
 
 	e.HTTPErrorHandler = handler.ErrorHandler
 

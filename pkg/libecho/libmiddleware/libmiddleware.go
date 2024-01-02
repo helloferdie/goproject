@@ -2,6 +2,8 @@ package libmiddleware
 
 import (
 	"spun/pkg/liblogger"
+	"spun/pkg/libsession"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -20,4 +22,31 @@ func Logger() echo.MiddlewareFunc {
 			return nil
 		},
 	})
+}
+
+// Session -
+func Session(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		session := new(libsession.Session)
+
+		header := c.Request().Header
+		session.Language = header.Get("Accept-Language")
+
+		tz := header.Get("Accept-Timezone")
+		loc, err := time.LoadLocation(tz)
+		if err != nil {
+			loc, _ = time.LoadLocation("UTC")
+		}
+		session.Timezone = loc
+
+		ip := c.Request().Header.Get("X-Real-Ip")
+		if ip == "" {
+			ip = c.Request().RemoteAddr
+		}
+		session.IPAddress = ip
+
+		ctx := libsession.NewContext(c.Request().Context(), session)
+		c.SetRequest(c.Request().WithContext(ctx))
+		return next(c)
+	}
 }

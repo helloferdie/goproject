@@ -1,9 +1,12 @@
 package service
 
 import (
+	"context"
+	"fmt"
 	"spun/internal/model"
 	"spun/internal/repository"
 	"spun/pkg/liberror"
+	"spun/pkg/libsession"
 )
 
 type CategoryService struct {
@@ -16,7 +19,17 @@ func NewCategoryService(repo repository.CategoryRepository) *CategoryService {
 	}
 }
 
-func (s *CategoryService) ViewCategory(id int64) (*model.Category, *liberror.Error) {
+func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Category, *liberror.Error) {
+	fmt.Println("Read context - Start")
+	fmt.Println(ctx)
+	fmt.Println("Read context - Done")
+
+	session, _ := libsession.FromContext(ctx)
+	if session != nil {
+		fmt.Println("Session found " + session.Timezone.String())
+		fmt.Println("Session found " + session.Language)
+	}
+
 	if id == 0 {
 		fieldErrors := []*liberror.Base{
 			{Error: "common.error.validation.required",
