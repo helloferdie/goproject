@@ -5,10 +5,16 @@ import (
 	"time"
 )
 
+type SessionJWT struct {
+	TokenID            int64 `json:"token_id"`
+	UserID             int64 `json:"user_id"`
+	RoleID             int64 `json:"role_id"`
+	OrganizationID     int64 `json:"organization_id"`
+	OrganizationRoleID int64 `json:"organization_role_id"`
+}
+
 type Session struct {
-	UserID    int64
-	AccountID int64
-	TokenID   int64
+	SessionJWT
 	IPAddress string
 	Language  string
 	Timezone  *time.Location

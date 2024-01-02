@@ -1,12 +1,15 @@
 package libmiddleware
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"spun/pkg/liblogger"
 	"spun/pkg/libsession"
+	"strings"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -53,15 +56,52 @@ func Session(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// JWT -
-func JWT(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		headerToken := c.Request().Header.Get("Authorization")
-		if headerToken == "" {
-			return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.required")
-		}
+type jwtClaims struct {
+	libsession.SessionJWT
+	jwt.RegisteredClaims
+}
 
-		fmt.Println("JWT")
-		return next(c)
+func JWT(secret []byte) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			headerToken := c.Request().Header.Get("Authorization")
+			if headerToken == "" {
+				return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.required")
+			}
+
+			splitToken := strings.Split(headerToken, " ")
+			tokenString := splitToken[1]
+			token, err := jwt.ParseWithClaims(tokenString, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
+				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+					return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+				}
+				return secret, nil
+			})
+			if err != nil {
+				return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.invalid")
+			}
+
+			if token.Valid {
+				claims, ok := token.Claims.(*jwtClaims)
+				if !ok {
+					return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.claims")
+				}
+
+				session, exist := libsession.FromContext(c.Request().Context())
+				if !exist {
+					// To avoid this error, make sure you have applied middleware 'Session' before 'JWT'
+					return echo.NewHTTPError(http.StatusInternalServerError, "common.error.request.jwt.session")
+				}
+
+				// Assign claims to session
+				session.SessionJWT = claims.SessionJWT
+				return next(c)
+			}
+
+			if errors.Is(err, jwt.ErrTokenExpired) || errors.Is(err, jwt.ErrTokenNotValidYet) {
+				return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.expired")
+			}
+			return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.invalid")
+		}
 	}
 }

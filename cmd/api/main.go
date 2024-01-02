@@ -33,13 +33,17 @@ func main() {
 	e.Use(libmiddleware.Logger())
 	e.Use(libmiddleware.Session)
 
+	jwtByte := []byte(os.Getenv("jwt_secret"))
+	jwtMiddleware := libmiddleware.JWT(jwtByte)
+
 	categoryRepo := mysql.NewMySQLCategoryRepository(db)
 	categoryService := service.NewCategoryService(categoryRepo)
 	categoryHandler := handler.NewCategoryHandler(categoryService)
 
 	categoryRoute := e.Group("/v1/category")
 	categoryRoute.POST("/view", categoryHandler.ViewCategory)
-	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, libmiddleware.JWT)
+	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, jwtMiddleware)
+	categoryRoute.POST("/restricted2", categoryHandler.ViewCategory, jwtMiddleware)
 
 	e.Logger.Fatal(e.Start(":1200"))
 }

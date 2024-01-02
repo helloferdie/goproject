@@ -28,6 +28,8 @@ func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Ca
 	if session != nil {
 		fmt.Println("Session found " + session.Timezone.String())
 		fmt.Println("Session found " + session.Language)
+		fmt.Printf("Session found user ID %v\n", session.UserID)
+		fmt.Printf("Session found role ID %v", session.RoleID)
 	}
 
 	if id == 0 {
