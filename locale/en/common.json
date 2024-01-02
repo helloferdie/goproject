@@ -6,24 +6,26 @@
       "forbidden": "Forbidden request",
       "media_type": "Unsupported media type",
       "method": "Method not allowed",
-      "timeout": "Request timeout",
-      "not_found": "Data not found",
-      "route": {
-        "not_found": "Route not found"
+      "not_found": {
+        "data": "Data not found",
+        "default": "Resource not found",
+        "route": "Route not found"
       },
-      "unauthorized": "Unauthorized request"
+      "timeout": "Request timeout",
+      "unauthorized": "Unauthorized request",
+      "unmarshal": "Invalid type for {{.f}}, expected {{.e}} got {{.v}}"
     },
     "server": {
       "default": "Internal server error",
       "not_implemented": "Service not implemented yet",
       "repository": "{{common.error.server.default}}",
-      "unknown": "{{common.error.server.default}}",
-      "timeout": "Server timeout"
+      "timeout": "Server timeout",
+      "unknown": "{{common.error.server.default}}"
     },
     "validation": {
       "default": "Validation error",
-      "required": "{{.field}} is required",
-      "email": "{{.field}} must be a valid email"
+      "email": "{{.field}} must be a valid email",
+      "required": "{{.field}} is required"
     }
   },
   "id": {

@@ -21,30 +21,33 @@ var (
 	// Request
 	ErrForbidden    = "common.error.request.forbidden"
 	ErrUnauthorized = "common.error.request.unauthorized"
-	ErrNotFound     = "common.error.request.not_found"
+	ErrNotFound     = "common.error.request.not_found.data"
 
 	// Server
 	ErrRepository     = "common.error.server.repository"
 	ErrNotImplemented = "common.error.server.not_implemented"
 )
 
-func NewError(errorType string, errorMessages ...string) *Error {
-	baseErrors := make([]*Base, len(errorMessages))
-	for i, msg := range errorMessages {
-		baseErrors[i] = &Base{Error: msg}
-	}
+func NewError(errorType string, list []*Base) *Error {
 	return &Error{
 		Type:   errorType,
-		Errors: baseErrors,
+		Errors: list,
 	}
+}
+
+func NewErrorQuick(errorType string, errorMessage string) *Error {
+	return NewError(errorType, []*Base{{
+		Error:     errorMessage,
+		ErrorVars: nil,
+	}})
 }
 
 func NewServerError(errMsg string) *Error {
-	return NewError(TypeServer, errMsg)
+	return NewErrorQuick(TypeServer, errMsg)
 }
 
 func NewRequestError(errMsg string) *Error {
-	return NewError(TypeRequest, errMsg)
+	return NewErrorQuick(TypeRequest, errMsg)
 }
 
 func NewErrNotImplemented() *Error {
@@ -55,8 +58,11 @@ func NewErrRepository() *Error {
 	return NewServerError(ErrRepository)
 }
 
-func NewErrNotFound() *Error {
-	return NewRequestError(ErrNotFound)
+func NewErrNotFound(msg string) *Error {
+	if msg == "" {
+		msg = "common.error.request.not_found.data"
+	}
+	return NewErrorQuick("common.error.request.not_found.default", msg)
 }
 
 func NewErrValidation(fields ...*Base) *Error {

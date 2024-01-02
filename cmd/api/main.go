@@ -27,12 +27,11 @@ func main() {
 	defer db.Close()
 
 	e := echo.New()
+	e.HTTPErrorHandler = handler.ErrorHandler
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	e.Use(libmiddleware.Logger())
 	e.Use(libmiddleware.Session)
-
-	e.HTTPErrorHandler = handler.ErrorHandler
 
 	categoryRepo := mysql.NewMySQLCategoryRepository(db)
 	categoryService := service.NewCategoryService(categoryRepo)
@@ -40,6 +39,7 @@ func main() {
 
 	categoryRoute := e.Group("/v1/category")
 	categoryRoute.POST("/view", categoryHandler.ViewCategory)
+	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, libmiddleware.JWT)
 
 	e.Logger.Fatal(e.Start(":1200"))
 }

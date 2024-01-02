@@ -46,7 +46,7 @@ func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Ca
 	}
 
 	if category == nil {
-		return nil, liberror.NewErrNotFound()
+		return nil, liberror.NewErrNotFound("")
 	}
 
 	return category, nil

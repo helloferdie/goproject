@@ -1,6 +1,8 @@
 package libmiddleware
 
 import (
+	"fmt"
+	"net/http"
 	"spun/pkg/liblogger"
 	"spun/pkg/libsession"
 	"time"
@@ -47,6 +49,19 @@ func Session(next echo.HandlerFunc) echo.HandlerFunc {
 
 		ctx := libsession.NewContext(c.Request().Context(), session)
 		c.SetRequest(c.Request().WithContext(ctx))
+		return next(c)
+	}
+}
+
+// JWT -
+func JWT(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		headerToken := c.Request().Header.Get("Authorization")
+		if headerToken == "" {
+			return echo.NewHTTPError(http.StatusUnauthorized, "common.error.request.jwt.required")
+		}
+
+		fmt.Println("JWT")
 		return next(c)
 	}
 }

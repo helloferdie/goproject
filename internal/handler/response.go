@@ -2,10 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"spun/pkg/liberror"
-	"spun/pkg/liberror/mapper"
 
 	"github.com/labstack/echo/v4"
 )
@@ -26,15 +24,6 @@ type ResponseJSON struct {
 	Data          interface{} `json:"data"`
 }
 
-// // NewResponse
-// func NewResponse() *Response {
-// 	return &Response{
-// 		Code:  501,
-// 		Data:  nil,
-// 		Error: liberror.NewErrNotImplemented(),
-// 	}
-// }
-
 // Set
 func (resp *Response) Set(code int, data interface{}, err *liberror.Error) {
 	resp.Code = code
@@ -47,42 +36,52 @@ func (resp *Response) Success(data interface{}, err *liberror.Error) {
 	resp.Set(200, data, err)
 }
 
-// // ErrorResponse
-// func (resp *Response) ErrorResponse(data interface{}, err *liberror.Error) {
-// 	resp
-// }
-
 // ErrorHandler handling echo labstack default error
 func ErrorHandler(err error, c echo.Context) {
-	//code := http.StatusInternalServerError
 	he, ok := err.(*echo.HTTPError)
 	if !ok {
 		he = echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+	errMsg := he.Message.(string)
 
 	resp := new(Response)
 	resp.Code = he.Code
-	resp.Error = mapper.MapHTTPError(he.Code)
 
-	if he.Code == 400 {
+	switch he.Code {
+	case 400:
 		if e1, ok := he.Internal.(*json.UnmarshalTypeError); ok {
-			resp.Error.Errors[0].ErrorVars = map[string]interface{}{
-				"f": e1.Field,
-				"e": e1.Type,
-				"v": e1.Value,
-			}
+			resp.Error = liberror.NewError("common.error.request.bad", []*liberror.Base{{
+				Error: "common.error.request.unmarshal",
+				ErrorVars: map[string]interface{}{
+					"f": e1.Field,
+					"e": e1.Type,
+					"v": e1.Value,
+				},
+			}})
+		} else {
+			resp.Error = liberror.NewErrorQuick("common.error.request.bad", errMsg)
 		}
+	case 401:
+		resp.Error = liberror.NewErrorQuick("common.error.request.unauthorized", errMsg)
+	case 403:
+		resp.Error = liberror.NewErrorQuick("common.error.request.forbidden", errMsg)
+	case 404:
+		resp.Error = liberror.NewErrorQuick("common.error.request.not_found.default", "common.error.request.not_found.route")
+	case 405:
+		resp.Error = liberror.NewErrorQuick("common.error.request.method", "common.error.request.method")
+	case 408:
+		resp.Error = liberror.NewErrorQuick("common.error.request.timeout", "common.error.request.timeout")
+	case 415:
+		resp.Error = liberror.NewErrorQuick("common.error.request.media_type", "common.error.request.media_type")
+	case 500:
+		resp.Error = liberror.NewErrorQuick("common.error.server.default", "common.error.server.default")
+	case 501:
+		resp.Error = liberror.NewErrorQuick("common.error.server.not_implemented", "common.error.server.not_implemented")
+	case 504:
+		resp.Error = liberror.NewErrorQuick("common.error.server.timeout", "common.error.server.timeout")
+	default:
+		resp.Error = liberror.NewErrorQuick("common.error.server.unknown", errMsg)
 	}
-
-	// switch code {
-	// case http.StatusNotFound:
-	// 	resp.Error = liberror.NewRequestError(liberror.ErrRouteNotFound)
-	// case http.StatusUnsupportedMediaType:
-	// 	resp.Error = liberror.NewRequestError(liberror.ErrMediaType)
-	// }
-
-	fmt.Println(err)
-
 	FormatResponse(c, resp)
 }
 
@@ -116,6 +115,5 @@ func FormatResponse(c echo.Context, resp *Response) error {
 		json.Success = true
 		json.Message = "common.success.default"
 	}
-
 	return c.JSON(json.Code, json)
 }
