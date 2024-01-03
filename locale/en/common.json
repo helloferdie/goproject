@@ -5,13 +5,14 @@
       "default": "Invalid request",
       "forbidden": "Forbidden request",
       "jwt": {
+        "claims": "JWT token not valid",
         "expired": "JWT token already expired",
         "invalid": "JWT token not valid",
         "required": "JWT token is required",
         "revoked": "JWT token is revoked",
-        "claims": "JWT token not valid",
         "session": "Internal server error"
       },
+      "many": "Too many request",
       "media_type": "Unsupported media type",
       "method": "Method not allowed",
       "not_found": {

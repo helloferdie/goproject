@@ -54,6 +54,11 @@ func loadConfig() {
 	}
 }
 
+// Sync
+func Sync() {
+	logger.Sync()
+}
+
 // Infow -
 func Infow(msg string, values ...interface{}) {
 	loadConfig()

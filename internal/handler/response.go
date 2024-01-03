@@ -73,6 +73,8 @@ func ErrorHandler(err error, c echo.Context) {
 		resp.Error = liberror.NewErrorQuick("common.error.request.timeout", "common.error.request.timeout")
 	case 415:
 		resp.Error = liberror.NewErrorQuick("common.error.request.media_type", "common.error.request.media_type")
+	case 429:
+		resp.Error = liberror.NewErrorQuick("common.error.request.many", "common.error.request.many")
 	case 500:
 		resp.Error = liberror.NewErrorQuick("common.error.server.default", "common.error.server.default")
 	case 501:
@@ -106,6 +108,8 @@ func FormatResponse(c echo.Context, resp *Response) error {
 				switch err.Error {
 				case liberror.ErrNotFound:
 					json.Code = 404
+				default:
+					json.Code = 500
 				}
 			}
 		}

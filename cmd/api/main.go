@@ -6,6 +6,7 @@ import (
 	"spun/internal/repository/mysql"
 	"spun/internal/service"
 	"spun/pkg/libdb"
+	"spun/pkg/libecho"
 	"spun/pkg/libecho/libmiddleware"
 	"spun/pkg/liblogger"
 
@@ -32,6 +33,7 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(libmiddleware.Logger())
 	e.Use(libmiddleware.Session)
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
 
 	jwtByte := []byte(os.Getenv("jwt_secret"))
 	jwtMiddleware := libmiddleware.JWT(jwtByte)
@@ -45,22 +47,5 @@ func main() {
 	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, jwtMiddleware)
 	categoryRoute.POST("/restricted2", categoryHandler.ViewCategory, jwtMiddleware)
 
-	e.Logger.Fatal(e.Start(":1200"))
+	libecho.StartHttp(e)
 }
-
-// func errorHandler(err error, c echo.Context) {
-// 	fmt.Println(err)
-// 	fmt.Println(c)
-
-// 	return FormatResponse(c, resp)
-
-// 	// code := http.StatusInternalServerError
-// 	// if he, ok := err.(*echo.HTTPError); ok {
-// 	// 	code = he.Code
-// 	// }
-// 	// c.Logger().Error(err)
-// 	// errorPage := fmt.Sprintf("%d.html", code)
-// 	// if err := c.File(errorPage); err != nil {
-// 	// 	c.Logger().Error(err)
-// 	// }
-// }
