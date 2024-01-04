@@ -1,5 +1,8 @@
 {
   "error": {
+    "i18n": {
+      "syntax": "Localization for %{{.syntax}}% not found"
+    },
     "request": {
       "bad": "Bad request",
       "default": "Invalid request",
@@ -27,9 +30,9 @@
     "server": {
       "default": "Internal server error",
       "not_implemented": "Service not implemented yet",
-      "repository": "{{common.error.server.default}}",
+      "repository": "<T common.error.server.default>",
       "timeout": "Server timeout",
-      "unknown": "{{common.error.server.default}}"
+      "unknown": "<T common.error.server.default>"
     },
     "validation": {
       "default": "Validation error",

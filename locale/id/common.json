@@ -1,37 +1,49 @@
 {
   "error": {
+    "i18n": {
+      "syntax": "Lokalisasi untuk %{{.syntax}}% tidak ditemukan"
+    },
     "request": {
-      "bad": "Bad request",
-      "default": "Invalid request",
-      "forbidden": "Forbidden request",
-      "media_type": "Unsupported media type",
-      "method": "Method not allowed",
-      "not_found": {
-        "data": "Data not found",
-        "default": "Resource not found",
-        "route": "Route not found"
+      "bad": "Permintaan buruk",
+      "default": "Permintaan tidak valid",
+      "forbidden": "Permintaan dilarang",
+      "jwt": {
+        "claims": "Token JWT tidak valid",
+        "expired": "Token JWT sudah kedaluwarsa",
+        "invalid": "Token JWT tidak valid",
+        "required": "Token JWT diperlukan",
+        "revoked": "Token JWT dicabut",
+        "session": "Kesalahan server internal"
       },
-      "timeout": "Request timeout",
-      "unauthorized": "Unauthorized request",
-      "unmarshal": "Invalid type for {{.f}}, expected {{.e}} got {{.v}}"
+      "many": "Terlalu banyak permintaan",
+      "media_type": "Tipe media tidak didukung",
+      "method": "Metode tidak diizinkan",
+      "not_found": {
+        "data": "Data tidak ditemukan",
+        "default": "Sumber tidak ditemukan",
+        "route": "Rute tidak ditemukan"
+      },
+      "timeout": "Waktu permintaan habis",
+      "unauthorized": "Permintaan tidak sah",
+      "unmarshal": "Tipe tidak valid untuk {{.f}}, diharapkan {{.e}} mendapat {{.v}}"
     },
     "server": {
-      "default": "Internal server error",
-      "not_implemented": "Service not implemented yet",
-      "repository": "{{common.error.server.default}}",
-      "timeout": "Server timeout",
-      "unknown": "{{common.error.server.default}}"
+      "default": "Kesalahan server internal",
+      "not_implemented": "Layanan belum diimplementasikan",
+      "repository": "<T common.error.server.default>",
+      "timeout": "Waktu server habis",
+      "unknown": "<T common.error.server.default>"
     },
     "validation": {
-      "default": "Validation error",
-      "email": "{{.field}} must be a valid email",
-      "required": "{{.field}} is required"
+      "default": "Kesalahan validasi",
+      "email": "{{.field}} harus email yang valid",
+      "required": "{{.field}} diperlukan"
     }
   },
   "id": {
     "other": "ID"
   },
   "success": {
-    "default": "Request successfully processed"
+    "default": "Permintaan berhasil diproses"
   }
 }
