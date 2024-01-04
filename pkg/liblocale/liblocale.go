@@ -9,11 +9,15 @@ import (
 	"strings"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
-// Regex for detect <T syntax>
-var regexTemplate = regexp.MustCompile(`^<T (.+)>$`)
+// Regex for detect {{syntax}}
+var regexTemplate = regexp.MustCompile(`^{{(.+)}}$`)
+
+// Regex for detect chain template <T syntax>
+var regexChainTemplate = regexp.MustCompile(`^<T (.+)>$`)
 
 // LoadBundle
 func LoadBundle() (*i18n.Bundle, error) {
@@ -91,9 +95,41 @@ func LoadBundle() (*i18n.Bundle, error) {
 
 // Translate
 func Translate(loc *i18n.Localizer, syntax string, data interface{}) string {
+	// Translate template data
+	templateData := map[string]string{}
+	if t, ok := data.(map[string]string); ok {
+		for k, v := range t {
+			isSyntax, s := checkSytax(v, regexTemplate)
+			if isSyntax {
+				txt := strings.Split(s, " ")
+				txtLen := len(txt)
+
+				localeTxt := Translate(loc, txt[0], nil)
+				if txtLen > 1 {
+					// Check format
+					if txt[1] == "upper" {
+						t[k] = strings.ToUpper(localeTxt)
+						continue
+					} else if txt[1] == "lower" {
+						t[k] = strings.ToLower(localeTxt)
+						continue
+					} else if txt[1] == "title" {
+						t[k] = cases.Title(language.English).String(localeTxt)
+						continue
+					}
+				}
+				t[k] = localeTxt
+				continue
+			}
+			t[k] = v
+		}
+		templateData = t
+	}
+
+	// Translate syntax
 	s, err := loc.Localize(&i18n.LocalizeConfig{
 		MessageID:    syntax,
-		TemplateData: data,
+		TemplateData: templateData,
 	})
 	if err != nil {
 		s, err = loc.Localize(&i18n.LocalizeConfig{
@@ -107,8 +143,8 @@ func Translate(loc *i18n.Localizer, syntax string, data interface{}) string {
 		}
 	}
 
-	// Do translate SYTNTAX if return string is chained syntax <<SYNTAX>>
-	isChain, syntaxChain := checkSyntax(s)
+	// Check translated syntax is chained syntax <<SYNTAX>>
+	isChain, syntaxChain := checkSytax(s, regexChainTemplate)
 	if isChain {
 		s = Translate(loc, syntaxChain, data)
 	}
@@ -136,10 +172,10 @@ func flattenJSON(prefix string, value interface{}, out map[string]string) {
 	}
 }
 
-// checkSyntax verify syntax is chain syntax
-func checkSyntax(input string) (bool, string) {
+// checkSyntax verify syntax with regex
+func checkSytax(input string, reg *regexp.Regexp) (bool, string) {
 	// Check if the input matches the pattern
-	matches := regexTemplate.FindStringSubmatch(input)
+	matches := reg.FindStringSubmatch(input)
 
 	// If it's a match, return true and the extracted key
 	if len(matches) > 1 {

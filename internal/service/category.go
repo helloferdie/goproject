@@ -35,9 +35,11 @@ func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Ca
 	if id == 0 {
 		fieldErrors := []*liberror.Base{
 			{Error: "common.error.validation.required",
-				ErrorVars: map[string]interface{}{"field": "Field1"}},
+				Field:     "id",
+				ErrorVars: map[string]string{"field": "{{common.id.other upper}}"}},
 			{Error: "common.error.validation.email",
-				ErrorVars: map[string]interface{}{"field": "Field2"}},
+				Field:     "email",
+				ErrorVars: map[string]string{"field": "{{common.email title}}"}},
 		}
 		return nil, liberror.NewErrValidation(fieldErrors...)
 	}

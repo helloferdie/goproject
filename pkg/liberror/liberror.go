@@ -2,7 +2,8 @@ package liberror
 
 type Base struct {
 	Error     string
-	ErrorVars map[string]interface{}
+	Field     string
+	ErrorVars map[string]string
 }
 
 type Error struct {

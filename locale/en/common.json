@@ -43,6 +43,7 @@
   "id": {
     "other": "ID"
   },
+  "email": "email",
   "success": {
     "default": "Request successfully processed"
   }

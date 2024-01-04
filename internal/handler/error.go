@@ -24,9 +24,9 @@ func ErrorHandler(err error, c echo.Context) {
 		if e1, ok := he.Internal.(*json.UnmarshalTypeError); ok {
 			resp.Error = liberror.NewError("common.error.request.bad", []*liberror.Base{{
 				Error: "common.error.request.unmarshal",
-				ErrorVars: map[string]interface{}{
+				ErrorVars: map[string]string{
 					"f": e1.Field,
-					"e": e1.Type,
+					"e": e1.Type.String(),
 					"v": e1.Value,
 				},
 			}})

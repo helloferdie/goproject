@@ -47,12 +47,29 @@ func FormatResponse(c echo.Context, resp *Response) error {
 		err := resp.Error.Errors[0]
 		json.Message = resp.Error.Type
 		json.Error = err.Error
+		json.ErrorLocale = liblocale.Translate(localizer, err.Error, err.ErrorVars)
 
 		// Parse error to HTTP code
 		if json.Code == 0 {
 			if resp.Error.Type == liberror.TypeValidation {
 				json.Code = 422
-				json.Data = resp.Error.Errors
+				errList := []interface{}{}
+				for k, err := range resp.Error.Errors {
+					if k == 0 {
+						errList = append(errList, map[string]interface{}{
+							"field":        err.Field,
+							"error":        err.Error,
+							"error_locale": json.ErrorLocale,
+						})
+						continue
+					}
+					errList = append(errList, map[string]interface{}{
+						"field":        err.Field,
+						"error":        err.Error,
+						"error_locale": liblocale.Translate(localizer, err.Error, err.ErrorVars),
+					})
+				}
+				json.Data = errList
 			} else {
 				switch err.Error {
 				case liberror.ErrNotFound:
@@ -62,8 +79,6 @@ func FormatResponse(c echo.Context, resp *Response) error {
 				}
 			}
 		}
-
-		json.ErrorLocale = liblocale.Translate(localizer, json.Error, nil)
 	}
 
 	if resp.Code == 200 {
