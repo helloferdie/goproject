@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"spun/pkg/liblogger"
 	"time"
 
+	"github.com/helloferdie/golib/v2/liblogger"
 	"github.com/labstack/echo/v4"
 )
 

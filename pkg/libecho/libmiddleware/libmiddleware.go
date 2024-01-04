@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"spun/pkg/liblogger"
 	"spun/pkg/libsession"
 	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/helloferdie/golib/v2/liblogger"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )

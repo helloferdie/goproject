@@ -1,8 +1,7 @@
 package libdb
 
 import (
-	"spun/pkg/liblogger"
-
+	"github.com/helloferdie/golib/v2/liblogger"
 	"github.com/jmoiron/sqlx"
 )
 

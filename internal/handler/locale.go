@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"spun/pkg/liblocale"
-
+	"github.com/helloferdie/golib/v2/liblocale"
 	"github.com/labstack/echo/v4"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )

@@ -2,8 +2,8 @@ package handler
 
 import (
 	"spun/pkg/liberror"
-	"spun/pkg/liblocale"
 
+	"github.com/helloferdie/golib/v2/liblocale"
 	"github.com/labstack/echo/v4"
 )
 

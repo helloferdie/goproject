@@ -8,8 +8,8 @@ import (
 	"spun/pkg/libdb"
 	"spun/pkg/libecho"
 	"spun/pkg/libecho/libmiddleware"
-	"spun/pkg/liblogger"
 
+	"github.com/helloferdie/golib/v2/liblogger"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
