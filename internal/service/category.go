@@ -7,6 +7,7 @@ import (
 	"spun/internal/repository"
 	"spun/pkg/liberror"
 	"spun/pkg/libsession"
+	"spun/pkg/libvalidator"
 )
 
 type CategoryService struct {
@@ -19,7 +20,31 @@ func NewCategoryService(repo repository.CategoryRepository) *CategoryService {
 	}
 }
 
-func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Category, *liberror.Error) {
+type CreateCategoryParam struct {
+	Name        string `json:"name" loc:"common.name title" validate:"required"`
+	Description string `json:"description" loc:"common.description title" validate:"required"`
+}
+
+func (s *CategoryService) CreateCategory(ctx context.Context, param *CreateCategoryParam) (*model.Category, *liberror.Error) {
+	if errParam := libvalidator.Validate(param); errParam != nil {
+		return nil, errParam
+	}
+
+	category := new(model.Category)
+	category.Name = param.Name
+	category.Description = param.Description
+	category, err := s.repo.Create(category)
+	if err != nil {
+		return nil, liberror.NewErrRepository()
+	}
+	return category, nil
+}
+
+type ViewCategoryParam struct {
+	ID int64 `json:"id"`
+}
+
+func (s *CategoryService) ViewCategory(ctx context.Context, param *ViewCategoryParam) (*model.Category, *liberror.Error) {
 	fmt.Println("Read context - Start")
 	fmt.Println(ctx)
 	fmt.Println("Read context - Done")
@@ -32,7 +57,7 @@ func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Ca
 		fmt.Printf("Session found role ID %v", session.RoleID)
 	}
 
-	if id == 0 {
+	if param.ID == 0 {
 		fieldErrors := []*liberror.Base{
 			{Error: "common.error.validation.required",
 				Field:     "id",
@@ -44,7 +69,7 @@ func (s *CategoryService) ViewCategory(ctx context.Context, id int64) (*model.Ca
 		return nil, liberror.NewErrValidation(fieldErrors...)
 	}
 
-	category, err := s.repo.GetByID(id)
+	category, err := s.repo.GetByID(param.ID)
 	if err != nil {
 		return nil, liberror.NewErrRepository()
 	}

@@ -1,8 +1,9 @@
 {
+  "description": "description",
   "email": "email",
   "error": {
     "i18n": {
-      "syntax": "Localization for %{{.syntax}}% not found"
+      "syntax": "Localization for [{{.syntax}}] not found"
     },
     "request": {
       "bad": "Bad request",

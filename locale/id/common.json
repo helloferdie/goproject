@@ -1,8 +1,9 @@
 {
+  "description": "deskripsi",
   "email": "email",
   "error": {
     "i18n": {
-      "syntax": "Lokalisasi untuk %{{.syntax}}% tidak ditemukan"
+      "syntax": "Lokalisasi untuk [{{.syntax}}] tidak ditemukan"
     },
     "request": {
       "bad": "Permintaan buruk",

@@ -21,8 +21,13 @@ func NewMySQLCategoryRepository(db *sqlx.DB) repository.CategoryRepository {
 	}
 }
 
-func (*MySQLCategoryRepository) Create(category *model.Category) (*model.Category, error) {
-	panic("unimplemented")
+func (repo *MySQLCategoryRepository) Create(category *model.Category) (*model.Category, error) {
+	id, _, err := libdb.Exec(repo.DB, repo.Config.QueryInsert, category)
+	if err != nil {
+		return nil, err
+	}
+
+	return repo.GetByID(id)
 }
 
 func (repo *MySQLCategoryRepository) GetByID(id int64) (*model.Category, error) {
@@ -36,10 +41,4 @@ func (repo *MySQLCategoryRepository) GetByID(id int64) (*model.Category, error) 
 	}
 
 	return nil, err
-
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Println(exist)
-	// return category, err
 }

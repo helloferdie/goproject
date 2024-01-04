@@ -47,7 +47,8 @@ func FormatResponse(c echo.Context, resp *Response) error {
 		err := resp.Error.Errors[0]
 		json.Message = resp.Error.Type
 		json.Error = err.Error
-		json.ErrorLocale = liblocale.Translate(localizer, err.Error, err.ErrorVars)
+		errLocale, _ := liblocale.Translate(localizer, err.Error, err.ErrorVars)
+		json.ErrorLocale = errLocale
 
 		// Parse error to HTTP code
 		if json.Code == 0 {
@@ -63,15 +64,21 @@ func FormatResponse(c echo.Context, resp *Response) error {
 						})
 						continue
 					}
+
+					errLocale, _ := liblocale.Translate(localizer, err.Error, err.ErrorVars)
 					errList = append(errList, map[string]interface{}{
 						"field":        err.Field,
 						"error":        err.Error,
-						"error_locale": liblocale.Translate(localizer, err.Error, err.ErrorVars),
+						"error_locale": errLocale,
 					})
 				}
 				json.Data = errList
 			} else {
 				switch err.Error {
+				case liberror.ErrUnauthorized:
+					json.Code = 401
+				case liberror.ErrForbidden:
+					json.Code = 403
 				case liberror.ErrNotFound:
 					json.Code = 404
 				default:
@@ -86,6 +93,7 @@ func FormatResponse(c echo.Context, resp *Response) error {
 		json.Message = "common.success.default"
 	}
 
-	json.MessageLocale = liblocale.Translate(localizer, json.Message, nil)
+	messageLocale, _ := liblocale.Translate(localizer, json.Message, nil)
+	json.MessageLocale = messageLocale
 	return c.JSON(json.Code, json)
 }
