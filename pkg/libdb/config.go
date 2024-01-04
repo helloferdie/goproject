@@ -11,6 +11,7 @@ type Config struct {
 	CondSoftDelete string
 	QuerySelect    string
 	QueryInsert    string
+	QueryUpdate    string
 	QueryDelete    string
 }
 
@@ -26,6 +27,7 @@ func NewConfig(model interface{}, table string, softDelete bool) *Config {
 	} else {
 		cfg.QueryDelete = "DELETE FROM " + cfg.Table + " WHERE 1=1 %s"
 	}
+	cfg.QueryUpdate = "UPDATE " + cfg.Table + " SET %s WHERE 1=1 %s"
 
 	queryCols, insertCols := getTags(model)
 

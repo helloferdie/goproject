@@ -45,6 +45,8 @@ func main() {
 	categoryRoute := e.Group("/v1/category")
 	categoryRoute.POST("/create", categoryHandler.CreateCategory)
 	categoryRoute.POST("/view", categoryHandler.ViewCategory)
+	categoryRoute.POST("/update", categoryHandler.UpdateCategory)
+	categoryRoute.POST("/delete", categoryHandler.DeleteCategory)
 	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, jwtMiddleware)
 	categoryRoute.POST("/restricted2", categoryHandler.ViewCategory, jwtMiddleware)
 

@@ -50,7 +50,7 @@ func FormatResponse(c echo.Context, resp *Response) error {
 		errLocale, _ := liblocale.Translate(localizer, err.Error, err.ErrorVars)
 		json.ErrorLocale = errLocale
 
-		// Parse error to HTTP code
+		// Parse error from service layer to HTTP status code
 		if json.Code == 0 {
 			if resp.Error.Type == liberror.TypeValidation {
 				json.Code = 422
