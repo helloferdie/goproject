@@ -1,4 +1,5 @@
 {
+  "email": "email",
   "error": {
     "i18n": {
       "syntax": "Lokalisasi untuk %{{.syntax}}% tidak ditemukan"
@@ -9,7 +10,7 @@
       "forbidden": "Permintaan dilarang",
       "jwt": {
         "claims": "Token JWT tidak valid",
-        "expired": "Token JWT sudah kedaluwarsa",
+        "expired": "Token JWT telah kedaluwarsa",
         "invalid": "Token JWT tidak valid",
         "required": "Token JWT diperlukan",
         "revoked": "Token JWT dicabut",
@@ -20,7 +21,7 @@
       "method": "Metode tidak diizinkan",
       "not_found": {
         "data": "Data tidak ditemukan",
-        "default": "Sumber tidak ditemukan",
+        "default": "Sumber daya tidak ditemukan",
         "route": "Rute tidak ditemukan"
       },
       "timeout": "Waktu permintaan habis",
@@ -36,14 +37,24 @@
     },
     "validation": {
       "default": "Kesalahan validasi",
-      "email": "{{.field}} harus email yang valid",
+      "email": "{{.field}} harus merupakan email yang valid",
       "required": "{{.field}} diperlukan"
     }
   },
+  "first_name": "nama depan",
+  "gender": "jenis kelamin",
   "id": {
     "other": "ID"
   },
+  "language": "bahasa",
+  "last_name": "nama belakang",
+  "mobile": "ponsel",
+  "name": "nama",
+  "password": "kata sandi",
+  "phone": "telepon",
+  "reset_password": "atur ulang kata sandi",
   "success": {
     "default": "Permintaan berhasil diproses"
-  }
+  },
+  "timezone": "zona waktu"
 }

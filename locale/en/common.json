@@ -1,4 +1,5 @@
 {
+  "email": "email",
   "error": {
     "i18n": {
       "syntax": "Localization for %{{.syntax}}% not found"
@@ -40,11 +41,20 @@
       "required": "{{.field}} is required"
     }
   },
+  "first_name": "first name",
+  "gender": "gender",
   "id": {
     "other": "ID"
   },
-  "email": "email",
+  "language": "language",
+  "last_name": "last name",
+  "mobile": "mobile",
+  "name": "name",
+  "password": "password",
+  "phone": "phone",
+  "reset_password": "reset password",
   "success": {
     "default": "Request successfully processed"
-  }
+  },
+  "timezone": "timezone"
 }
