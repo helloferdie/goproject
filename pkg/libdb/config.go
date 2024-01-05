@@ -5,39 +5,53 @@ import (
 	"strings"
 )
 
+// Config stores the configuration and generated SQL queries for a model and table.
 type Config struct {
 	Table          string
 	Fields         string
 	CondSoftDelete string
 	QuerySelect    string
+	QuerySelectRaw string // without softdelete
 	QueryInsert    string
 	QueryUpdate    string
 	QueryDelete    string
+	QueryTotal     string
+	QueryTotalRaw  string // without softdelete
 }
 
-// NewConfig
+// NewConfig creates a new Config for a given model and table.
 func NewConfig(model interface{}, table string, softDelete bool) *Config {
 	cfg := &Config{
 		Table: table,
 	}
 
+	queryCols, insertCols := getTags(model)
+	cfg.Fields = strings.Join(queryCols, ", ")
+
+	// Construct insert query
+	if len(insertCols) > 0 {
+		cfg.QueryInsert = "INSERT INTO " + cfg.Table + " (" + strings.Join(insertCols, ", ") +
+			") VALUES (:" + strings.Join(insertCols, ", :") + ")"
+	}
+
+	// Construct delete query
 	if softDelete {
 		cfg.CondSoftDelete = "AND deleted_at IS NULL "
 		cfg.QueryDelete = "UPDATE " + cfg.Table + " SET deleted_at = UTC_TIMESTAMP WHERE 1=1 %s"
 	} else {
 		cfg.QueryDelete = "DELETE FROM " + cfg.Table + " WHERE 1=1 %s"
 	}
+
+	// Construct update query
 	cfg.QueryUpdate = "UPDATE " + cfg.Table + " SET %s WHERE 1=1 %s"
 
-	queryCols, insertCols := getTags(model)
+	// Construct select query
+	cfg.QuerySelectRaw = "SELECT " + cfg.Fields + " FROM " + cfg.Table + " WHERE 1=1 %s "
+	cfg.QuerySelect = cfg.QuerySelectRaw + cfg.CondSoftDelete
 
-	cfg.Fields = strings.Join(queryCols, ", ")
-	cfg.QuerySelect = "SELECT " + cfg.Fields + " FROM " + cfg.Table + " WHERE 1=1 %s " + cfg.CondSoftDelete
-
-	if len(insertCols) > 0 {
-		cfg.QueryInsert = "INSERT INTO " + cfg.Table + " (" + strings.Join(insertCols, ", ") +
-			") VALUES (:" + strings.Join(insertCols, ", :") + ")"
-	}
+	// Construct total query
+	cfg.QueryTotalRaw = "SELECT COUNT(*) as total FROM " + cfg.Table + " WHERE 1=1 %s "
+	cfg.QueryTotal = cfg.QueryTotalRaw + cfg.CondSoftDelete
 
 	return cfg
 }

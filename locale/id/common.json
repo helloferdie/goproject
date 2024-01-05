@@ -27,18 +27,20 @@
       },
       "timeout": "Waktu permintaan habis",
       "unauthorized": "Permintaan tidak sah",
-      "unmarshal": "Tipe tidak valid untuk {{.f}}, diharapkan {{.e}} mendapat {{.v}}"
+      "unmarshal": "Tipe tidak valid untuk {{.f}}, diharapkan {{.e}} mendapatkan {{.v}}"
     },
     "server": {
       "default": "Kesalahan server internal",
       "not_implemented": "Layanan belum diimplementasikan",
       "repository": "<T common.error.server.default>",
-      "timeout": "Waktu server habis",
+      "timeout": "Waktu proses server habis",
       "unknown": "<T common.error.server.default>"
     },
     "validation": {
       "default": "Kesalahan validasi",
       "email": "{{.field}} harus merupakan email yang valid",
+      "max": "Nilai maksimum untuk {{.field}} adalah {{.val}}",
+      "min": "Nilai minimum untuk {{.field}} adalah {{.val}}",
       "required": "{{.field}} diperlukan"
     }
   },
@@ -51,9 +53,15 @@
   "last_name": "nama belakang",
   "mobile": "ponsel",
   "name": "nama",
+  "page": "halaman",
+  "page_size": "ukuran halaman",
   "password": "kata sandi",
   "phone": "telepon",
   "reset_password": "atur ulang kata sandi",
+  "sort": {
+    "direction": "arah pengurutan",
+    "field": "kolom pengurutan"
+  },
   "success": {
     "default": "Permintaan berhasil diproses"
   },

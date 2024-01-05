@@ -39,6 +39,8 @@
     "validation": {
       "default": "Validation error",
       "email": "{{.field}} must be a valid email",
+      "max": "Maximum value for {{.field}} is {{.val}}",
+      "min": "Minimum value for {{.field}} is {{.val}}",
       "required": "{{.field}} is required"
     }
   },
@@ -51,9 +53,15 @@
   "last_name": "last name",
   "mobile": "mobile",
   "name": "name",
+  "page": "page",
+  "page_size": "page size",
   "password": "password",
   "phone": "phone",
   "reset_password": "reset password",
+  "sort": {
+    "direction": "sort direction",
+    "field": "sort field"
+  },
   "success": {
     "default": "Request successfully processed"
   },

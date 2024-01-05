@@ -61,7 +61,7 @@ func (s *CategoryService) CheckCategoryExist(id int64) (*model.Category, *liberr
 
 // ViewCategoryParam
 type ViewCategoryParam struct {
-	ID int64 `json:"id" loc:"common.id.other upper" validate:"required"`
+	IDParam
 }
 
 // ViewCategory
@@ -75,7 +75,7 @@ func (s *CategoryService) ViewCategory(ctx context.Context, param *ViewCategoryP
 
 // UpdateCategoryParam
 type UpdateCategoryParam struct {
-	ID int64 `json:"id" loc:"common.id.other upper" validate:"required"`
+	IDParam
 	CreateCategoryParam
 }
 
@@ -106,7 +106,7 @@ func (s *CategoryService) UpdateCategory(ctx context.Context, param *UpdateCateg
 
 // DeleteCategoryParam
 type DeleteCategoryParam struct {
-	ID int64 `json:"id" loc:"common.id.other upper" validate:"required"`
+	IDParam
 }
 
 // DeleteCategory
@@ -125,4 +125,23 @@ func (s *CategoryService) DeleteCategory(ctx context.Context, param *DeleteCateg
 		return liberror.NewErrRepository()
 	}
 	return nil
+}
+
+// ListCategoryParam
+type ListCategoryParam struct {
+	PaginationParam
+}
+
+// ListCategory return list of categories from repository, totalItems, totalPages and error
+func (s *CategoryService) ListCategory(ctx context.Context, param *ListCategoryParam) ([]*model.Category, int64, int64, *liberror.Error) {
+	if errParam := libvalidator.Validate(param); errParam != nil {
+		return nil, 0, 0, errParam
+	}
+
+	list, totalItems, err := s.repo.List(nil, param.PaginationParam.ToModel())
+	if err != nil {
+		return nil, 0, 0, liberror.NewErrRepository()
+	}
+
+	return list, totalItems, GetTotalPages(totalItems, param.PageSize), nil
 }

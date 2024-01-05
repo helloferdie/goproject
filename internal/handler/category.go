@@ -95,3 +95,22 @@ func (h *CategoryHandler) DeleteCategory(c echo.Context) error {
 	}
 	return FormatResponse(c, resp)
 }
+
+// ListCategory handles the HTTP request for deleting an existing category
+func (h *CategoryHandler) ListCategory(c echo.Context) error {
+	req := new(service.ListCategoryParam)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+
+	ctx := c.Request().Context()
+	resp := new(Response)
+	list, totalItems, totalPages, err := h.service.ListCategory(ctx, req)
+	if err != nil {
+		resp.Set(0, nil, err)
+	} else {
+		session, _ := libsession.FromContext(ctx)
+		resp.Success(dto.CategoryList(session, list, totalItems, totalPages), nil)
+	}
+	return FormatResponse(c, resp)
+}

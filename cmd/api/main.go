@@ -47,6 +47,7 @@ func main() {
 	categoryRoute.POST("/view", categoryHandler.ViewCategory)
 	categoryRoute.POST("/update", categoryHandler.UpdateCategory)
 	categoryRoute.POST("/delete", categoryHandler.DeleteCategory)
+	categoryRoute.POST("/list", categoryHandler.ListCategory)
 	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, jwtMiddleware)
 	categoryRoute.POST("/restricted2", categoryHandler.ViewCategory, jwtMiddleware)
 

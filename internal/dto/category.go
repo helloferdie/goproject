@@ -17,3 +17,16 @@ func Category(s *libsession.Session, category *model.Category) map[string]interf
 		"deleted_at":  libtime.NullFormat(s.Timezone, category.DeletedAt),
 	}
 }
+
+func CategoryList(s *libsession.Session, list []*model.Category, totalItems int64, totalPages int64) map[string]interface{} {
+	items := make([]interface{}, len(list))
+	for k, v := range list {
+		items[k] = Category(s, v)
+	}
+
+	return map[string]interface{}{
+		"total_items": totalItems,
+		"total_pages": totalPages,
+		"items":       items,
+	}
+}

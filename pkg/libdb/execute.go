@@ -24,7 +24,7 @@ func Exec(d *sqlx.DB, query string, values interface{}) (int64, int64, error) {
 }
 
 // Get return single row from query
-func Get(db *sqlx.DB, list interface{}, query string, values map[string]interface{}) (bool, error) {
+func Get(db *sqlx.DB, i interface{}, query string, values map[string]interface{}) (bool, error) {
 	exist := false
 	rows, err := db.NamedQuery(query, values)
 	if err != nil {
@@ -34,7 +34,7 @@ func Get(db *sqlx.DB, list interface{}, query string, values map[string]interfac
 	defer rows.Close()
 
 	if rows.Next() {
-		err = rows.StructScan(list)
+		err = rows.StructScan(i)
 		if err != nil {
 			liblogger.Errorf("Error scan row %v", err)
 			return exist, err
@@ -42,4 +42,20 @@ func Get(db *sqlx.DB, list interface{}, query string, values map[string]interfac
 		exist = true
 	}
 	return exist, nil
+}
+
+// Select return rows from query
+func Select(db *sqlx.DB, list interface{}, query string, values map[string]interface{}) error {
+	query, args, err := sqlx.Named(query, values)
+	if err != nil {
+		liblogger.Errorf("Error preparing select query: %v", err)
+		return err
+	}
+
+	query = db.Rebind(query)
+	err = db.Select(list, query, args...)
+	if err != nil {
+		liblogger.Errorf("Error select query %v", err)
+	}
+	return err
 }
