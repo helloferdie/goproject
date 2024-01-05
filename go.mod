@@ -6,13 +6,14 @@ require (
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang-jwt/jwt/v5 v5.2.0
-	github.com/helloferdie/golib v0.1.11
+	github.com/helloferdie/golib v0.1.12
 	github.com/jinzhu/copier v0.4.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/nicksnyder/go-i18n/v2 v2.3.0
 	github.com/sony/sonyflake v1.2.0
+	go.uber.org/mock v0.4.0
 )
 
 require (

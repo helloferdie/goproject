@@ -66,7 +66,9 @@ func (s *AuditTrailService) CreateAuditTrail(ctx context.Context, modelName stri
 
 // logAuditTrail wrapper for CreateAuditTrail
 func logAuditTrail(svcAudit *AuditTrailService, ctx context.Context, modelName string, modelKey interface{}, action string, logData interface{}, remark string) {
-	go func() {
-		svcAudit.CreateAuditTrail(ctx, modelName, modelKey, action, logData, remark)
-	}()
+	if svcAudit != nil {
+		go func() {
+			svcAudit.CreateAuditTrail(ctx, modelName, modelKey, action, logData, remark)
+		}()
+	}
 }
