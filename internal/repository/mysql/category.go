@@ -83,6 +83,9 @@ func (repo *MySQLCategoryRepository) List(filter map[string]interface{}, paginat
 				}
 			}
 			querySelect += "ORDER BY " + strings.Join(tmp, ", ")
+		} else {
+			// Default sort
+			querySelect += "ORDER BY created_at DESC"
 		}
 
 		// Set query limit and offset
@@ -100,7 +103,8 @@ func (repo *MySQLCategoryRepository) List(filter map[string]interface{}, paginat
 // GetByID retrieves a category from the database based on the given ID
 func (repo *MySQLCategoryRepository) GetByID(id int64) (*model.Category, error) {
 	category := new(model.Category)
-	exist, err := libdb.Get(repo.DB, category, fmt.Sprintf(repo.Config.QuerySelect, "AND id = :id LIMIT 1"), map[string]interface{}{
+	querySelect := fmt.Sprintf(repo.Config.QuerySelect, "AND id = :id ") + " LIMIT 1"
+	exist, err := libdb.Get(repo.DB, category, querySelect, map[string]interface{}{
 		"id": id,
 	})
 

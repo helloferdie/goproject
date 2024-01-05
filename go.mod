@@ -12,6 +12,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/nicksnyder/go-i18n/v2 v2.3.0
+	github.com/sony/sonyflake v1.2.0
 )
 
 require (

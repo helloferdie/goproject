@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"spun/internal/model"
 	"spun/internal/repository"
 	"spun/pkg/liberror"
@@ -13,13 +12,15 @@ import (
 
 // CategoryService provides methods to interact with the category repository
 type CategoryService struct {
-	repo repository.CategoryRepository
+	repo     repository.CategoryRepository
+	svcAudit *AuditTrailService
 }
 
 // NewCategoryService creates a new instance of CategoryService
-func NewCategoryService(repo repository.CategoryRepository) *CategoryService {
+func NewCategoryService(repo repository.CategoryRepository, svc *AuditTrailService) *CategoryService {
 	return &CategoryService{
-		repo: repo,
+		repo:     repo,
+		svcAudit: svc,
 	}
 }
 
@@ -42,6 +43,7 @@ func (s *CategoryService) CreateCategory(ctx context.Context, param *CreateCateg
 	if err != nil {
 		return nil, liberror.NewErrRepository()
 	}
+	logAuditTrail(s.svcAudit, ctx, "category", category.ID, "create", category, "")
 	return category, nil
 }
 
@@ -99,8 +101,7 @@ func (s *CategoryService) UpdateCategory(ctx context.Context, param *UpdateCateg
 	if err != nil {
 		return nil, liberror.NewErrRepository()
 	}
-
-	fmt.Println(changes)
+	logAuditTrail(s.svcAudit, ctx, "category", category.ID, "update", changes, "")
 	return category, nil
 }
 
@@ -124,6 +125,7 @@ func (s *CategoryService) DeleteCategory(ctx context.Context, param *DeleteCateg
 	if err != nil {
 		return liberror.NewErrRepository()
 	}
+	logAuditTrail(s.svcAudit, ctx, "category", category.ID, "delete", nil, "")
 	return nil
 }
 

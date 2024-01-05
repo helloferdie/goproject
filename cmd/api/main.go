@@ -38,8 +38,11 @@ func main() {
 	jwtByte := []byte(os.Getenv("jwt_secret"))
 	jwtMiddleware := libmiddleware.JWT(jwtByte)
 
+	auditTrailRepo := mysql.NewMySQLAuditTrailRepository(db)
+	auditTrailService := service.NewAuditTrailService(auditTrailRepo)
+
 	categoryRepo := mysql.NewMySQLCategoryRepository(db)
-	categoryService := service.NewCategoryService(categoryRepo)
+	categoryService := service.NewCategoryService(categoryRepo, auditTrailService)
 	categoryHandler := handler.NewCategoryHandler(categoryService)
 
 	categoryRoute := e.Group("/v1/category")
