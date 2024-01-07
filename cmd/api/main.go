@@ -54,5 +54,13 @@ func main() {
 	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, jwtMiddleware)
 	categoryRoute.POST("/restricted2", categoryHandler.ViewCategory, jwtMiddleware)
 
+	countryRepo := mysql.NewMySQLCountryRepository(db)
+	countryService := service.NewCountryService(countryRepo)
+	countryHandler := handler.NewCountryHandler(countryService)
+
+	countryRoute := e.Group("/v1/country")
+	countryRoute.POST("/list", countryHandler.ListCountry)
+	countryRoute.POST("/view", countryHandler.ViewCountry)
+
 	libecho.StartHttp(e)
 }
