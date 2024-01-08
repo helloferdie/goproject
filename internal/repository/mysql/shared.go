@@ -1,8 +1,12 @@
 package mysql
 
 import (
+	"errors"
+	"fmt"
 	"spun/internal/model"
 	"strings"
+
+	"github.com/go-sql-driver/mysql"
 )
 
 // applySortFields
@@ -31,4 +35,25 @@ func applySortFields(querySelect string, queryValues map[string]interface{}, pag
 		queryValues["limit"] = pagination.Limit
 	}
 	return querySelect, queryValues
+}
+
+// parseError convert default error to recognizeable error
+func parseError(err error) error {
+	if err != nil {
+		// Convert the error to the MySQL error type
+		// This type assertion is safe as long as you're using the MySQL driver
+		if mysqlErr, ok := err.(*mysql.MySQLError); ok {
+			// Check if the error code is 1054, which is for unknown column
+			if mysqlErr.Number == 1054 {
+				if strings.Contains(strings.ToLower(mysqlErr.Message), "order clause") {
+					return errors.New("common.error.server.repository.sort")
+				}
+			}
+		} else {
+			// Handle other types of errors
+			fmt.Println("An error occurred:", err)
+		}
+		return errors.New("common.error.server.repository.default")
+	}
+	return nil
 }

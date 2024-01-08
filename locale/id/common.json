@@ -32,7 +32,10 @@
     "server": {
       "default": "Kesalahan server internal",
       "not_implemented": "Layanan belum diimplementasikan",
-      "repository": "<T common.error.server.default>",
+      "repository": {
+        "default": "<T common.error.server.default>",
+        "sort": "Pengurutan data berdasarkan kolom permintaan tidak didukung."
+      },
       "timeout": "Waktu proses server habis",
       "unknown": "<T common.error.server.default>"
     },

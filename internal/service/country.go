@@ -33,7 +33,7 @@ func (s *CountryService) ListCountry(ctx context.Context, param *ListCountryPara
 
 	list, totalItems, err := s.repo.List(nil, param.PaginationParam.ToModel())
 	if err != nil {
-		return nil, 0, 0, liberror.NewErrRepository()
+		return nil, 0, 0, liberror.NewServerError(err.Error())
 	}
 
 	return list, totalItems, GetTotalPages(totalItems, param.PageSize), nil
@@ -43,7 +43,7 @@ func (s *CountryService) ListCountry(ctx context.Context, param *ListCountryPara
 func (s *CountryService) CheckCountryExist(id int64) (*model.Country, *liberror.Error) {
 	country, err := s.repo.GetByID(id)
 	if err != nil {
-		return nil, liberror.NewErrRepository()
+		return nil, liberror.NewServerError(err.Error())
 	}
 
 	if country == nil {

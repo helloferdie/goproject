@@ -32,7 +32,10 @@
     "server": {
       "default": "Internal server error",
       "not_implemented": "Service not implemented yet",
-      "repository": "<T common.error.server.default>",
+      "repository": {
+        "default": "<T common.error.server.default>",
+        "sort": "Sort data based on request fields is not supported."
+      },
       "timeout": "Server timeout",
       "unknown": "<T common.error.server.default>"
     },

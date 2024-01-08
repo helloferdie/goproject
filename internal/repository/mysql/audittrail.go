@@ -18,12 +18,12 @@ type MySQLAuditTrailRepository struct {
 func NewMySQLAuditTrailRepository(db *sqlx.DB) repository.AuditTrailRepository {
 	return &MySQLAuditTrailRepository{
 		DB:     db,
-		Config: libdb.NewConfig(model.AuditTrail{}, "audit_trail_1", true),
+		Config: libdb.NewConfig(model.AuditTrail{}, "audit_trail", true),
 	}
 }
 
 // Create
 func (repo *MySQLAuditTrailRepository) Create(audit *model.AuditTrail) error {
 	_, _, err := libdb.Exec(repo.DB, repo.Config.QueryInsert, audit)
-	return err
+	return parseError(err)
 }

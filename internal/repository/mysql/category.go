@@ -28,7 +28,7 @@ func NewMySQLCategoryRepository(db *sqlx.DB) repository.CategoryRepository {
 func (repo *MySQLCategoryRepository) Create(category *model.Category) (*model.Category, error) {
 	id, _, err := libdb.Exec(repo.DB, repo.Config.QueryInsert, category)
 	if err != nil {
-		return nil, err
+		return nil, parseError(err)
 	}
 	return repo.GetByID(id)
 }
@@ -41,11 +41,11 @@ func (repo *MySQLCategoryRepository) Update(id int64, original, modified *model.
 	})
 	_, _, err := libdb.Exec(repo.DB, fmt.Sprintf(repo.Config.QueryUpdate, querySet, "AND id = :id"), queryValues)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, parseError(err)
 	}
 
 	category, err := repo.GetByID(id)
-	return category, changes, err
+	return category, changes, parseError(err)
 }
 
 // Delete removes a category from the database
@@ -53,7 +53,7 @@ func (repo *MySQLCategoryRepository) Delete(id int64) error {
 	_, _, err := libdb.Exec(repo.DB, fmt.Sprintf(repo.Config.QueryDelete, "AND id = :id"), map[string]interface{}{
 		"id": id,
 	})
-	return err
+	return parseError(err)
 }
 
 // List returns list of categories include with pagination
@@ -65,7 +65,7 @@ func (repo *MySQLCategoryRepository) List(filter map[string]interface{}, paginat
 	queryTotal := fmt.Sprintf(repo.Config.QueryTotal, condition)
 	_, err := libdb.Get(repo.DB, total, queryTotal, values)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, parseError(err)
 	}
 
 	// Pagination
@@ -97,7 +97,7 @@ func (repo *MySQLCategoryRepository) List(filter map[string]interface{}, paginat
 	// Query list
 	list := []*model.Category{}
 	err = libdb.Select(repo.DB, &list, querySelect, values)
-	return list, total.Total, err
+	return list, total.Total, parseError(err)
 }
 
 // GetByID retrieves a category from the database based on the given ID
@@ -111,5 +111,5 @@ func (repo *MySQLCategoryRepository) GetByID(id int64) (*model.Category, error) 
 	if err == nil && exist {
 		return category, nil
 	}
-	return nil, err
+	return nil, parseError(err)
 }

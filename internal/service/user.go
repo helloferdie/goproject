@@ -33,7 +33,7 @@ func (s *UserService) ListUser(ctx context.Context, param *ListUserParam) ([]*mo
 
 	list, totalItems, err := s.repo.List(nil, param.PaginationParam.ToModel())
 	if err != nil {
-		return nil, 0, 0, liberror.NewErrRepository()
+		return nil, 0, 0, liberror.NewServerError(err.Error())
 	}
 
 	return list, totalItems, GetTotalPages(totalItems, param.PageSize), nil
@@ -43,7 +43,7 @@ func (s *UserService) ListUser(ctx context.Context, param *ListUserParam) ([]*mo
 func (s *UserService) CheckUserExist(id int64) (*model.User, *liberror.Error) {
 	user, err := s.repo.GetByID(id)
 	if err != nil {
-		return nil, liberror.NewErrRepository()
+		return nil, liberror.NewServerError(err.Error())
 	}
 
 	if user == nil {

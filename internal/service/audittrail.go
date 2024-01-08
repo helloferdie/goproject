@@ -59,7 +59,7 @@ func (s *AuditTrailService) CreateAuditTrail(ctx context.Context, modelName stri
 	audit.GenerateID()
 	err := s.repo.Create(audit)
 	if err != nil {
-		return liberror.NewErrRepository()
+		return liberror.NewServerError(err.Error())
 	}
 	return nil
 }

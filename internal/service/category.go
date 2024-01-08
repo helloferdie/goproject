@@ -41,7 +41,7 @@ func (s *CategoryService) CreateCategory(ctx context.Context, param *CreateCateg
 	category.Description = param.Description
 	category, err := s.repo.Create(category)
 	if err != nil {
-		return nil, liberror.NewErrRepository()
+		return nil, liberror.NewServerError(err.Error())
 	}
 	logAuditTrail(s.svcAudit, ctx, "category", category.ID, "create", category, "")
 	return category, nil
@@ -51,7 +51,7 @@ func (s *CategoryService) CreateCategory(ctx context.Context, param *CreateCateg
 func (s *CategoryService) CheckCategoryExist(id int64) (*model.Category, *liberror.Error) {
 	category, err := s.repo.GetByID(id)
 	if err != nil {
-		return nil, liberror.NewErrRepository()
+		return nil, liberror.NewServerError(err.Error())
 	}
 
 	if category == nil {
@@ -99,7 +99,7 @@ func (s *CategoryService) UpdateCategory(ctx context.Context, param *UpdateCateg
 
 	category, changes, err := s.repo.Update(category.ID, category, newCategory)
 	if err != nil {
-		return nil, liberror.NewErrRepository()
+		return nil, liberror.NewServerError(err.Error())
 	}
 	logAuditTrail(s.svcAudit, ctx, "category", category.ID, "update", changes, "")
 	return category, nil
@@ -123,7 +123,7 @@ func (s *CategoryService) DeleteCategory(ctx context.Context, param *DeleteCateg
 
 	err := s.repo.Delete(category.ID)
 	if err != nil {
-		return liberror.NewErrRepository()
+		return liberror.NewServerError(err.Error())
 	}
 	logAuditTrail(s.svcAudit, ctx, "category", category.ID, "delete", nil, "")
 	return nil
@@ -142,7 +142,7 @@ func (s *CategoryService) ListCategory(ctx context.Context, param *ListCategoryP
 
 	list, totalItems, err := s.repo.List(nil, param.PaginationParam.ToModel())
 	if err != nil {
-		return nil, 0, 0, liberror.NewErrRepository()
+		return nil, 0, 0, liberror.NewServerError(err.Error())
 	}
 
 	return list, totalItems, GetTotalPages(totalItems, param.PageSize), nil

@@ -34,7 +34,7 @@ func (repo *MySQLUserRepository) List(filter map[string]interface{}, pagination 
 	queryTotal := fmt.Sprintf(repo.Config.QueryTotal, condition)
 	_, err := libdb.Get(repo.DB, total, queryTotal, values)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, parseError(err)
 	}
 
 	//repo.Config.
@@ -46,7 +46,7 @@ func (repo *MySQLUserRepository) List(filter map[string]interface{}, pagination 
 	// Query list
 	list := []*model.User{}
 	err = libdb.Select(repo.DB, &list, querySelect, values)
-	return list, total.Total, err
+	return list, total.Total, parseError(err)
 }
 
 // GetByID retrieves a user from the database based on the given ID
@@ -60,5 +60,5 @@ func (repo *MySQLUserRepository) GetByID(id int64) (*model.User, error) {
 	if err == nil && exist {
 		return user, nil
 	}
-	return nil, err
+	return nil, parseError(err)
 }
