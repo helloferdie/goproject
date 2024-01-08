@@ -38,8 +38,12 @@ func main() {
 	jwtByte := []byte(os.Getenv("jwt_secret"))
 	jwtMiddleware := libmiddleware.JWT(jwtByte)
 
+	// Audit Trail
+
 	auditTrailRepo := mysql.NewMySQLAuditTrailRepository(db)
 	auditTrailService := service.NewAuditTrailService(auditTrailRepo)
+
+	// Category
 
 	categoryRepo := mysql.NewMySQLCategoryRepository(db)
 	categoryService := service.NewCategoryService(categoryRepo, auditTrailService)
@@ -54,6 +58,8 @@ func main() {
 	categoryRoute.POST("/restricted", categoryHandler.ViewCategory, jwtMiddleware)
 	categoryRoute.POST("/restricted2", categoryHandler.ViewCategory, jwtMiddleware)
 
+	// Country
+
 	countryRepo := mysql.NewMySQLCountryRepository(db)
 	countryService := service.NewCountryService(countryRepo)
 	countryHandler := handler.NewCountryHandler(countryService)
@@ -61,6 +67,16 @@ func main() {
 	countryRoute := e.Group("/v1/country")
 	countryRoute.POST("/list", countryHandler.ListCountry)
 	countryRoute.POST("/view", countryHandler.ViewCountry)
+
+	// User
+
+	userRepo := mysql.NewMySQLUserRepository(db)
+	userService := service.NewUserService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+
+	userRoute := e.Group("/v1/user")
+	userRoute.POST("/list", userHandler.ListUser)
+	userRoute.POST("/view", userHandler.ViewUser)
 
 	libecho.StartHttp(e)
 }

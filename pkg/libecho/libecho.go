@@ -19,7 +19,6 @@ func StartHttp(e *echo.Echo) {
 			liblogger.Errorf("Fail to start http server %v", err)
 		}
 		liblogger.Infow("Shutdown HTTP server")
-		liblogger.Sync()
 		os.Exit(0)
 	}()
 

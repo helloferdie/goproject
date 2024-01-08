@@ -1,5 +1,3 @@
-// category_service_test.go
-
 package service_test
 
 import (
