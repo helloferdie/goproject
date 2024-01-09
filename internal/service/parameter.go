@@ -1,8 +1,8 @@
 package service
 
 import (
+	"goproj/internal/model"
 	"math"
-	"spun/internal/model"
 )
 
 // IDParam

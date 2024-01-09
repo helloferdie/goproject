@@ -1,9 +1,9 @@
 package mysql
 
 import (
-	"spun/internal/model"
-	"spun/internal/repository"
-	"spun/pkg/libdb"
+	"goproj/internal/model"
+	"goproj/internal/repository"
+	"goproj/pkg/libdb"
 
 	"github.com/jmoiron/sqlx"
 )

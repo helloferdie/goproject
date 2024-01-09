@@ -1,6 +1,6 @@
 package repository
 
-import "spun/internal/model"
+import "goproj/internal/model"
 
 type CountryRepository interface {
 	List(filter map[string]interface{}, pagination *model.Pagination) ([]*model.Country, int64, error)

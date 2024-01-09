@@ -1,9 +1,9 @@
 package dto
 
 import (
-	"spun/internal/model"
-	"spun/pkg/libsession"
-	"spun/pkg/libtime"
+	"goproj/internal/model"
+	"goproj/pkg/libsession"
+	"goproj/pkg/libtime"
 )
 
 func User(s *libsession.Session, user *model.User) map[string]interface{} {

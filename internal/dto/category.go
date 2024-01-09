@@ -1,9 +1,9 @@
 package dto
 
 import (
-	"spun/internal/model"
-	"spun/pkg/libsession"
-	"spun/pkg/libtime"
+	"goproj/internal/model"
+	"goproj/pkg/libsession"
+	"goproj/pkg/libtime"
 )
 
 func Category(s *libsession.Session, category *model.Category) map[string]interface{} {

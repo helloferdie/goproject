@@ -1,13 +1,13 @@
 package main
 
 import (
+	"goproj/internal/handler"
+	"goproj/internal/repository/mysql"
+	"goproj/internal/service"
+	"goproj/pkg/libdb"
+	"goproj/pkg/libecho"
+	"goproj/pkg/libecho/libmiddleware"
 	"os"
-	"spun/internal/handler"
-	"spun/internal/repository/mysql"
-	"spun/internal/service"
-	"spun/pkg/libdb"
-	"spun/pkg/libecho"
-	"spun/pkg/libecho/libmiddleware"
 
 	"github.com/helloferdie/golib/v2/liblogger"
 	"github.com/joho/godotenv"

@@ -1,8 +1,8 @@
 package libvalidator
 
 import (
+	"goproj/pkg/liberror"
 	"reflect"
-	"spun/pkg/liberror"
 	"strings"
 
 	"github.com/go-playground/validator/v10"

@@ -2,8 +2,8 @@ package handler
 
 import (
 	"encoding/json"
+	"goproj/pkg/liberror"
 	"net/http"
-	"spun/pkg/liberror"
 
 	"github.com/labstack/echo/v4"
 )

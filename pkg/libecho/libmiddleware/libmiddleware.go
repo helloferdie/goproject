@@ -3,8 +3,8 @@ package libmiddleware
 import (
 	"errors"
 	"fmt"
+	"goproj/pkg/libsession"
 	"net/http"
-	"spun/pkg/libsession"
 	"strings"
 	"time"
 

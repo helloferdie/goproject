@@ -1,6 +1,6 @@
-# SPUN
+# Go Project
 
-Core function of SPUN backend written in GO.
+Project with repository pattern and dependency injection written in Go.
 
 ## Project Structure
 
@@ -45,7 +45,7 @@ These instructions will get you a copy of the project up and running on your loc
 - Make sure initial database is created and accessible, if not use the following query for MySQL
 
 ```
-CREATE DATABASE `spunv2_db` DEFAULT CHARACTER SET = `utf8mb4` DEFAULT COLLATE = `utf8mb4_general_ci`;
+CREATE DATABASE `goproject_db` DEFAULT CHARACTER SET = `utf8mb4` DEFAULT COLLATE = `utf8mb4_general_ci`;
 ```
 
 - Finally, run the application using the command `go run main.go`.
@@ -70,11 +70,11 @@ cd migration/mysql
 goose mysql "user:password@tcp(host:port)/dbname?charset=utf8&parseTime=true" up
 ```
 
-## API Guidelines
+# API Guidelines
 
 These instructions will guide you on how to utilize the REST API:
 
-### Authentication
+## Authentication
 
 Authentication is achieved through a Bearer Token using JWT in the request header.
 
@@ -82,7 +82,7 @@ Authentication is achieved through a Bearer Token using JWT in the request heade
 Authorization: Bearer <jwt_token>
 ```
 
-### Localization
+## Localization
 
 To ensure proper localization, include `Accept-Timezone` with the value of desired timezone and `Accept-Language` with the value of the available supported translation file in your request header. List of available Timezone value can be checked from [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
@@ -90,3 +90,7 @@ To ensure proper localization, include `Accept-Timezone` with the value of desir
 Accept-Timezone: Asia/Jakarta
 Accept-Language: en
 ```
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE.md) file for details.

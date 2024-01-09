@@ -1,6 +1,6 @@
 package repository
 
-import "spun/internal/model"
+import "goproj/internal/model"
 
 type UserRepository interface {
 	List(filter map[string]interface{}, pagination *model.Pagination) ([]*model.User, int64, error)

@@ -1,6 +1,6 @@
 package repository
 
-import "spun/internal/model"
+import "goproj/internal/model"
 
 type CategoryRepository interface {
 	Create(category *model.Category) (*model.Category, error)

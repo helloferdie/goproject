@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"goproj/cmd/scheduler/job"
 	"os"
-	"spun/cmd/scheduler/job"
 	"time"
 
 	"github.com/go-co-op/gocron/v2"

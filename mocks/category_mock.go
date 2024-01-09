@@ -11,7 +11,7 @@ package mocks
 
 import (
 	reflect "reflect"
-	model "spun/internal/model"
+	model "goproj/internal/model"
 
 	gomock "go.uber.org/mock/gomock"
 )

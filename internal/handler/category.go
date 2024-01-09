@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"spun/internal/dto"
-	"spun/internal/service"
-	"spun/pkg/libsession"
+	"goproj/internal/dto"
+	"goproj/internal/service"
+	"goproj/pkg/libsession"
 
 	"github.com/labstack/echo/v4"
 )

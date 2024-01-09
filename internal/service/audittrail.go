@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"spun/internal/model"
-	"spun/internal/repository"
-	"spun/pkg/liberror"
-	"spun/pkg/libsession"
+	"goproj/internal/model"
+	"goproj/internal/repository"
+	"goproj/pkg/liberror"
+	"goproj/pkg/libsession"
 	"strconv"
 )
 

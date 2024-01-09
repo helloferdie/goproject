@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
-	"spun/internal/model"
-	"spun/internal/repository"
-	"spun/pkg/liberror"
-	"spun/pkg/libvalidator"
+	"goproj/internal/model"
+	"goproj/internal/repository"
+	"goproj/pkg/liberror"
+	"goproj/pkg/libvalidator"
 )
 
 // UserService provides methods to interact with the user repository

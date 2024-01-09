@@ -3,7 +3,7 @@ package mysql
 import (
 	"errors"
 	"fmt"
-	"spun/internal/model"
+	"goproj/internal/model"
 	"strings"
 
 	"github.com/go-sql-driver/mysql"

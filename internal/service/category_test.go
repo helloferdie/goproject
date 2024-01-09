@@ -2,9 +2,9 @@ package service_test
 
 import (
 	"context"
-	"spun/internal/model"
-	"spun/internal/service"
-	"spun/mocks"
+	"goproj/internal/model"
+	"goproj/internal/service"
+	"goproj/mocks"
 	"testing"
 
 	"go.uber.org/mock/gomock"
